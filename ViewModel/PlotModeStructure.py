@@ -19,4 +19,5 @@ class PlotModeStructure:
             ax.tick_params(labelsize=18)
             phi = phi_list[:, mode-1].reshape(len(r_list), -1).T.real
             plt.tight_layout()
-            ctf = ax.contourf(r, theta, phi, cmap=cm.jet)
+            ctf = ax.contourf(r, theta, phi, 100, cmap=cm.jet)
+        return fig

@@ -8,12 +8,13 @@ import pandas as pd
 from matplotlib import pyplot as plt, cm
 
 from Model.DMD import DMD
+from ViewModel.Factory import Factory
 from ViewModel.Parameter import Parameter
 from ViewModel.PlotModeStructure import PlotModeStructure
 from ViewModel.ViewModel import ViewModel
 
 
-class testDMD(unittest.TestCase):
+class testPlotDMD(unittest.TestCase):
 
     @staticmethod
     def __listup_files(path):
@@ -21,17 +22,17 @@ class testDMD(unittest.TestCase):
 
     def setUp(self) -> None:
         parameter_dict: Dict[Parameter, int] = {}
-        parameter_dict[Parameter.mode_num] = 1
-        parameter_dict[Parameter.r_num] = 2
+        parameter_dict[Parameter.mode_num] = 3
+        parameter_dict[Parameter.r_num] = 0
         parameter_dict[Parameter.ene_num] = 1
-        parameter_dict[Parameter.theta_num] = 0
+        parameter_dict[Parameter.theta_num] = 2
         p = './TestData/04P005**.txt'
         file_list = sorted(self.__listup_files(p))
-        view_model = ViewModel(parameter_dict, file_list)
-        self.time_range = view_model.time_range
-        self.energy_list = view_model.energy_list
-        self.mode_num = view_model.mode_num
-        self.parameter_list = view_model.parameter_list
+        self.view_model = ViewModel(parameter_dict, file_list)
+        self.time_range = self.view_model.time_range
+        self.energy_list = self.view_model.energy_list
+        self.mode_num = self.view_model.mode_num
+        self.parameter_list = self.view_model.parameter_list
 
     def test_plot_DMD(self):
         dmd = DMD(self.time_range, self.energy_list, self.mode_num)
@@ -55,5 +56,10 @@ class testDMD(unittest.TestCase):
         plt.tight_layout()
         ctf = ax.contourf(r, si_ta, phi, 100, cmap=cm.jet)
         plt.show()
+
+    def test_factory(self):
+        factory = Factory(self.view_model)
+        fig = factory.create_fig()
+        plt.plot(fig)
 
 
